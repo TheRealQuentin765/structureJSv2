@@ -1,0 +1,9 @@
+{
+    "author": "Quentin765",
+    "description": "Easily create and valididate structures. (create is an optional dependancy)",
+    
+    "versions": [6,8],
+    "modloaders": ["fabric","forge"],
+    "dependencies": [],
+    "incompatibilities": []
+}
