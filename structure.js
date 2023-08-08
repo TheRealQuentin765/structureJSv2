@@ -1,3 +1,5 @@
+let DEBUGMODE = false //if true will put into the chat all places where the verify structure was not happy
+
 //loops through a pattern for and for every block call a callback passing the pattern value and a block after being matrix multiplied
 function getStructure(block,pattern,callback,direction) {
     //let matrix = getMatrixFromDirection(direction)
@@ -63,7 +65,7 @@ function verifyStructure(block,pattern,key,direction) {
                 }
             }
         }
-        if (DEBUGMODE) tell(`At ${block.x} ${block.y} ${block.z} is ${block.id} but should be ${blockType}`)
+        if (DEBUGMODE) Utils.server.tell(`At ${block.x} ${block.y} ${block.z} is ${block.id} but should be ${blockType}`)
         valid = false
         return true //stop operation of the rest of the getStructure
     },direction)
