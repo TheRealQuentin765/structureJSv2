@@ -1,0 +1,139 @@
+<script src="MappedDirection.js"></script>
+<script>
+    const tests = {
+        emptyConstructor: function() { return [
+            new MappedDirection().toString(),
+            "xyz"
+        ] },
+        stateConstructor: function() { return [
+            new MappedDirection("xZy").toString(),
+            "xZy"
+        ] },
+        blockOffset: function() {
+            let block = new FakeBlock(0,0,0)
+            let matrix = new MappedDirection("xZy")
+            block = matrix.offsetBlock(block, [1,2,3])
+            return [
+                block.getCords(),
+                '1, -3, 2'
+            ]
+        },
+        directionConstructor: function() { return [
+            new MappedDirection(Direction.east).toString(),
+            "xyz"
+        ] },
+        directionAndOffset: function() {
+            let matrix = new MappedDirection(Direction.south, true)
+            block = matrix.offsetBlock(new FakeBlock(0,0,0), [1,2,3])
+            return [
+                block.getCords(),
+                '3, 2, 1'
+            ]
+        },
+        flipZ1: function() {
+            let matrix = new MappedDirection("XZy")
+            matrix.flipZ()
+            return [
+                matrix.toString(),
+                'Xzy'
+            ]
+        },
+        flipZ2: function() {
+            let matrix = new MappedDirection("zYx")
+            matrix.flipZ()
+            return [
+                matrix.toString(),
+                'ZYx'
+            ]
+        }
+    }
+
+
+    //FakeBlock for testing:
+
+    fakeBlocks = []
+
+    function FakeBlock(x,y,z) {
+        this.x = x
+        this.y = y
+        this.z = z
+        this.ensureState()
+    }
+
+    FakeBlock.prototype.offset = function(x,y,z) {
+        return new FakeBlock(this.x+x, this.y+y, this.z+z)
+    }
+
+    FakeBlock.prototype.getCords = function() {
+        return `${this.x}, ${this.y}, ${this.z}`
+    }
+
+    FakeBlock.prototype.toString = function() {
+        return `${this.getId()} at ${this.getCords()}`
+    }
+
+    FakeBlock.prototype.getId = function() {
+        return fakeBlocks[this.x][this.y][this.z]
+    }
+
+    FakeBlock.prototype.ensureState = function() { //make sure that there is a block in the space and does some basic (terrible) terrain gen
+        if (fakeBlocks[this.x] == undefined) fakeBlocks[this.x] = []
+        if (fakeBlocks[this.x][this.y] == undefined) fakeBlocks[this.x][this.y] = []
+        if (fakeBlocks[this.x][this.y][this.z] == undefined) {
+            if (this.y <= -1) {
+                if ((this.x*7 + 2*this.z + 3*this.y) % 5 == 1) fakeBlocks[this.x][this.y][this.z] = "ore"
+                else fakeBlocks[this.x][this.y][this.z] = "dirt"
+            } else {
+                if ((this.x*13+this.z*23) % 17 > this.y) fakeBlocks[this.x][this.y][this.z] = "log"
+                else  fakeBlocks[this.x][this.y][this.z] = "air"
+            }
+        }
+    }
+
+    FakeBlock.prototype.set = function(newValue) {
+        fakeBlocks[this.x][this.y][this.z] = newValue
+    }
+
+    FakeBlock.prototype.getUp = function()    {return this.offset(0,1,0)}
+    FakeBlock.prototype.getDown = function()  {return this.offset(0,-1,0)}
+    FakeBlock.prototype.getNorth = function() {return this.offset(0,0,-1)}
+    FakeBlock.prototype.getWest = function()  {return this.offset(-1,0,0)}
+    FakeBlock.prototype.getSouth = function() {return this.offset(0,0,1)}
+    FakeBlock.prototype.getEast = function()  {return this.offset(1,0,0)}
+
+
+
+    const Direction = {
+        up: ["up"],
+        down: ["down"],
+        west: ["west"],
+        south: ["south"],
+        east: ["east"],
+        north: ["north"]
+    }
+
+
+    //run tests
+
+    function doTests() {
+        let totalCount = 0
+        let passedCount = 0
+        for (testName in tests) {
+            totalCount++
+            let value = tests[testName]()
+            if (value[0] == value[1])
+                passedCount++
+            else {
+                console.log(`${testName} failed.`)
+                console.log('Expected:')
+                console.log(value[1])
+                console.log('Got:')
+                console.log(value[0])
+                console.log()
+            }
+        }
+        console.log(`${passedCount} of ${totalCount} passed!`)
+    }
+
+    doTests()
+</script>
