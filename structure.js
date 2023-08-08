@@ -25,7 +25,7 @@ function buildStructure(block,pattern,key,direction,verify) {
     if (verify != undefined) {
         let validBlocks
         if (verify === true)
-            validBlocks = ['minecraft:air','minecraft:dirt','minecraft:dead_bush','kubejs:blue_light','kubejs:yellow_light','kubejs:pink_light','minecraft:black_wool','minecraft:yellow_wool','minecraft:pink_wool','minecraft:light_blue_wool','minecraft:spruce_log','minecraft:shroomlight']
+            validBlocks = ['minecraft:air','minecraft:dirt','minecraft:dead_bush']
         else
             validBlocks = verify
         let valid = true
