@@ -56,11 +56,11 @@ function verifyStructure(block,pattern,key,direction) {
             } else { //array check id and blockstate
                 if (block.id == blockType[0]) {//check id
                     let validBlock = true //check for every key in the blockstate
-                    for(const key in blockType[1]) {
+                    Object.keys(blockType[1]).forEach(key => {
                         if(block.properties[key] == undefined || block.properties[key] != blockType[1][key].toString()) {
                             validBlock = false
                         }
-                    }
+                    })
                     if (validBlock) return
                 }
             }
